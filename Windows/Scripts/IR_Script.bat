@@ -3,7 +3,7 @@
 :: Name:     IR_Script.cmd
 :: Purpose:  Collect artifacts in a incident response case based on Windows operating system 
 :: Author:   FS FANG
-:: Version:	 1.0.7
+:: Version:	 1.0.9
 :: Revision: Sep 2020 - initial version
 ::	     	 Oct 2020 - add UsrClass.dat
 ::	     	 Nov 2020 - compatible with 32/64-bit operation system
