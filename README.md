@@ -33,7 +33,7 @@
 ## Windows
 ### DF Script
 
-![DF_Script](https://user-images.githubusercontent.com/16744374/211188008-6ab676c3-7de5-4599-8696-1bc50cb09735.png)
+![DF_Script](https://user-images.githubusercontent.com/16744374/226188120-85da8c86-3042-480f-9242-3fa0813d085e.jpg)
 
 - Case Name
 - System Drive: mounting drive
@@ -79,7 +79,7 @@
 
 ### IR Script
 
-![IR_Script](https://user-images.githubusercontent.com/16744374/211188017-33c79e9a-1472-440a-b35e-bf91f5dabaaf.png)
+![IR_Script](https://user-images.githubusercontent.com/16744374/226188180-92987731-763b-4584-93ba-d75726440de4.jpg)
 
 #### Setting Script Variables
 
@@ -219,7 +219,7 @@
 ## Linux
 ### IR Script
 
-![IR_Scritp_linux](https://user-images.githubusercontent.com/16744374/211159961-97c84fe5-4c97-408b-9f2c-0dccd63f9a45.png)
+![Linux_IR_Script](https://user-images.githubusercontent.com/16744374/226188223-72ecbedf-f2a5-4c7f-b7bd-4ed9d7614c22.jpg)
 
 **Make sure executed script as root or with sudo command.**
 
@@ -309,7 +309,7 @@ Get File Creation Date/Time
 ## OS X
 ### IR Script
 
-<img width="1057" alt="IR_Scritp_osx" src="https://user-images.githubusercontent.com/16744374/211160275-d7d0dcb7-3ca6-43c5-b556-95f6ee77b21d.png">
+<img width="554" alt="OSX_IR_Script" src="https://user-images.githubusercontent.com/16744374/226188257-8edc6ffe-f4bb-4cc9-9148-31d7f72b4bda.png">
 
 **Make sure executed script as root or with sudo command.**
 
