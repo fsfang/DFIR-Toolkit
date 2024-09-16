@@ -3,223 +3,172 @@
 ```
 .
 │
-└───📁Linux
-│   └───📁LiME
+└───📁 Linux
+│   └───📁 LiME
 │   │
-│   └───📁Scripts
-│       │   🗎IR_Script.sh
-│       └───🗎crtime.sh
+│   └───📁 Scripts
+│       │　 🗎 IR_Script.sh
+│       └── 🗎 crtime.sh
 │   
-└───📁OS X
-│   └───🗎IR_Script.sh
+└───📁 OS X
+│   └───🗎 IR_Script.sh
 │  
-└───📁Windows
-    └───📁Scripts
-    │   │    🗎DF_Script.bat
-    │   │    🗎dumpcap.bat
-    │   │    🗎EvtxECmd_Script.bat
-    │   │    🗎IR_Script.bat
-    │   └─── 🗎RegRipper_Script.bat
-    └───📁Tools
-        │    📁CryptoCurrency
-        │    📁DiskImage
-        │    📁EvidenceAnalysis
-        │    📁EvidenceCollection
-        │    📁LogAnalysis
-        │    📁MemoryAnalysis
-        │    📁Miscellaneous
-        └─── 📁Webshell-Scan
+└───📁 Windows
+    └───📁 Scripts
+    │   │　 🗎 DFIR.cmd
+    │   └── 🗎 dumpcap.bat
+    └───📁 Tools
+    　   │　 📁 EvidenceAnalysis
+    　   │　 📁 EvidenceCollection
+    　   └── 📁 Miscellaneous
 ```
+
 ## Windows
-### DF Script
 
-![DF_Script](https://user-images.githubusercontent.com/16744374/211188008-6ab676c3-7de5-4599-8696-1bc50cb09735.png)
+### DFIR.cmd
 
-- Case Name
-- System Drive: mounting drive
-- legacy OS: Enter 1 if run on XP, 2000, 2003 Windows operation system platform
+![2024-09-16 23_13_58](https://github.com/user-attachments/assets/867af057-21a3-49b9-8a6d-cc578313cb65)
 
-#### Collecting artifacts and parsing automatically
+```
+Usage:
+    DFIR.cmd [options] [optional argument] 
 
-- System Timeline (MAC)
-- Automatically Start Programs
-    - Task files
-- Registry (System, Software, Security, SAM, Amcache.hve(Win8+), USRCLASS.DAT, NTUSER.DAT)
-    - AmcacheParser
-    - SBECmd
-    - Call RegRipper_Script.bat
-- Recent files (AutomaticDestinations, CustomDestinations, *.lnk)
-    - JLECmd
-- Bitmap Cache
-    - bmc-tools
-- PowerShell console log
-- ActivitiesCache.db (Win10)
-    - WxTCmd
-- FTP logs (FileZilla, WinSCP)
-- Event Logs (AppEvent.evt, SecEvent.evt, SysEvent.evt, *.evtx)
-    - Call EvtxECmd_Script.bat
-- MBR
-- MFT, LogFile, UsnJrnl
-    - MFTECmd
-- Shimcache
-    - AppCompatCacheParser
-- Prefetch (*.pf)
-    - PECmd
-    - winprefetchview
-- Web Servers logs
-    - inetpub
-    - nginx
-- Windows exe, dll sign information
-    - sigcheck
-- $Recycle.Bin
-- Windows.edb
-- SRUM
-    - SrumECmd
-- AntiVirus logs (Avast, AVG, ESET, McAfee, Sophos, Symantec)
+    /?, --help           Display help information
+    /v, --version        Display version information
+    /m, --memory         Dump memory when live response
+    /l, --live           Run in live response mode. Collect artifacts for incident response investigation
+    /f, --forensics      Run in forensics mode. Collection artifacts from mounting disk image for investigation
+    /p, --parse          Analyze artifacts from collection files
 
-### IR Script
-
-![IR_Script](https://user-images.githubusercontent.com/16744374/211188017-33c79e9a-1472-440a-b35e-bf91f5dabaaf.png)
-
+Examples:
+    DFIR.cmd /m /l                        Dump physical memory and collect artifacts on local machine
+    DFIR.cmd /m /l /p ComputerName        Dump physical memory and collect artifacts with parsing on local machine (.net 6 software requires)
+    DFIR.cmd /f F: CaseName /p CaseName   Collecting and parsing artifacts from image mounting drive (F:)
+```
 #### Setting Script Variables
 
-- %1 - system drive: default (C:)
+Modify if needed:
 - Script Drive: `SCRIPT_DRIVE=%~d0`
 - Collection Folder: `%SCRIPT_DRIVE%\Collection_%COMPUTERNAME%`
-- CollectFilesTools Path: `%SCRIPT_DRIVE%\Windows\Tools\EvidenceCollection`
-- AnalysisTools Path: `%SCRIPT_DRIVE%\Windows\Tools\EvidenceAnalysis`
+- COLLECTION_TOOLS Path: `%SCRIPT_DRIVE%\Windows\Tools\EvidenceCollection`
+- ANALYSIS_TOOLS Path: `%SCRIPT_DRIVE%\Windows\Tools\EvidenceAnalysis`
 
-#### Collecting artifacts and parsing automatically
+#### Dump memory mode
+Memory dumping
 
-- System Info
+```shell
+DFIR.cmd /m
+```
+
+#### Live response mode
+Collect artifacts on local machine.
+
+```shell
+DFIR.cmd /l
+```
+
+##### Extract artifacts
+- System Information
 - System Timeline (MAC)
-- Network Activity
-    - ipconfig
-    - route
-    - nbtstat
-    - netstat
-    - arp
-    - net session
-    - net share
-    - promqry
-- User accounts, Logon users
-    - net user
-    - net user Administrator
-    - net localgroup
-    - net localgroup Administrators
-    - PsLoggedon
-- Processes Information
-    - tasklist
-    - pslist
-    - Listdlls
-    - handle
-    - PsService
-- Automatically Start Programs
-    - at
-    - schtasks
-    - Task files
-- Registry (System, Software, Security, SAM, Amcache.hve(Win8+), USRCLASS.DAT, NTUSER.DAT)
-    - AmcacheParser
-    - SBECmd
+- Network Activity (ipconfig, route, nbtstat, netstat, arp, net session, net share, promqry)
+- User accounts, Logon users (net user, net localgroup, loggon user)
+- Processes Information (tasklist, pslist, Listdlls, handle, service)
+- TaskInfo (Autoruns, at / schtasks, task files)
+- Registry Hive (System, Software, Security, SAM, NTUSER.dat, UsrClass,dat, Amcache)
 - Recent files (AutomaticDestinations, CustomDestinations, *.lnk)
-    - JLECmd
 - Bitmap Cache
-    - bmc-tools
-- PowerShell console log
+- PowerShell console log (ConsoleHost_history)
 - ActivitiesCache.db (Win10)
-    - WxTCmd
 - FTP logs (FileZilla, WinSCP)
 - Event Logs (AppEvent.evt, SecEvent.evt, SysEvent.evt, *.evtx)
 - MBR
-- MFT, LogFile, UsnJrnl
-    - MFTECmd
-- Shimcache
-    - AppCompatCacheParser
-    - ShimCacheParser_PY
-- Prefetch (*.pf)
-    - PECmd
-    - winprefetchview
-- Web Servers logs
-    - inetpub
-    - nginx
+- NTFS Information (MFT, LogFile, UsnJrnl)
+- Prefetch(*.pf)
+- Web Browser History
+- IIS (sites, apppools, apps, wps, modules, config, u_ex*.log)
 - Windows exe, dll sign information
-    - sigcheck
 - $Recycle.Bin
 - Windows.edb
+- SRUM (SRUDB.dat)
+- USBInfo (setupapi.log)
+- WMI (Repository, AutoRecover, mof)
+- CryptnetUrlCache (certutil log)
+- AntiVirus logs (Avast, AVG, ESET, McAfee, Sophos, Symantec, Windows Defender, F-Secure, Trend Micro)
+
+### Forensics mode
+Collect artifacts from disk image.
+
+```shell
+DFIR.cmd /f {Mount Point}
+```
+
+##### Extract artifacts
+- System Timeline (MAC)
+- TaskInfo (Autoruns, at / schtasks, task files)
+- Registry Hive (System, Software, Security, SAM, NTUSER.dat, UsrClass,dat, Amcache)
+- Recent files (AutomaticDestinations, CustomDestinations, *.lnk)
+- Bitmap Cache
+- PowerShell console log (ConsoleHost_history)
+- ActivitiesCache.db (Win10)
+- FTP logs (FileZilla, WinSCP)
+- Event Logs (AppEvent.evt, SecEvent.evt, SysEvent.evt, *.evtx)
+- MBR
+- NTFS Information (MFT, LogFile, UsnJrnl)
+- Prefetch(*.pf)
+- Web Browser History
+- Windows exe, dll sign information
+- $Recycle.Bin
+- Windows.edb
+- SRUM (SRUDB.dat)
+- USBInfo (setupapi.log)
+- WMI (Repository, AutoRecover, mof)
+- CryptnetUrlCache (certutil log)
+- AntiVirus logs (Avast, AVG, ESET, McAfee, Sophos, Symantec, Windows Defender, F-Secure, Trend Micro)
+
+### Parser mode
+
+```shell
+DFIR.cmd /p {CaseName}
+```
+#### Parse artifacts
+- Registry Hive (SAM, Amcache, Schtasks, USBDevice, UserActivity, SystemConfiguration, SoftwareExecutedHistory)
+- Bitmap cache
+- ActivitiesCache.db
+- Windows Event log
+    - Account management (Security.evtx)
+    - Account Logon and Logon Events (Security.evtx)
+    - Network Share Objects (Security.evtx)
+    - Scheduled task activity Events
+        - Task Scheduler (Microsoft-Windows-TaskScheduler%%4Operational.evtx)
+        - Object Access (Security.evtx)
+    - Object Handle Auditing (Security.evtx)
+    - Policy Changes Auditing
+        - Audit Policy Change (Security.evtx)
+        - Audit Policy Change System (System.evtx)
+    - Windows Services Auditing (Security.evtx)
+    - WiFi Connection (Security.evtx)
+    - Process Tracking (Security.evtx) ***EID: 4688 Default disabled***
+    - Program Execution (Microsoft-Windows-AppLocker%%4EXE.evtx)
+    - Sysmon Events (Microsoft-Windows-Sysmon%%4Operational.evtx) ***If installed***
+    - PowerShell Events
+        - PowerShell (Microsoft-Windows-PowerShell%%4Operational.evtx)
+        - (Windows PowerShell.evtx)
+    - Windows Defender
+        - Windows Defender (Microsoft-Windows-Windows Defender%%4Operational.evtx)
+        - WHC (Microsoft-Windows-Windows Defender%%4WHC.evtx)
+    - Remote Desktop Protocol
+        - RDP_LocalSessionManager (Microsoft-Windows-TerminalServices-LocalSessionManager%%4Operational.evtx)
+        - RDP_RemoteConnectionManager (Microsoft-Windows-TerminalServices-RemoteConnectionManager%%4Operational.evtx)
+        - RDP_Security (Security.evtx)
+        - RDP_System (System.evtx)
+- NTFS ($MFT, $LogFile, $J)
+- Shellbag
+- Recent Files (Jump list, LNK files)
+- Prefetch
 - SRUM
-    - SrumECmd
-- AntiVirus logs (Avast, AVG, ESET, McAfee, Sophos, Symantec)
-
-> Note: Acquiring Memory default is disabled
-
-### EvtxECmd Script (*.evtx)
-
-#### Setting Script Variables
-
-- %1 - Case Name
-- Script Drive: `SCRIPT_DRIVE=%~d0`
-- EvtxECmd.exe Path: `%SCRIPT_PATH%\Windows\Tools\EvidenceAnalysis\EvtxExplorer`
-- Event log folder Path: `%SCRIPT_PATH%\Collection_%CASE_NAME%\EventLog`
-- Parse Result Path: `%SCRIPT_PATH%\Collection_%CASE_NAME%\EvtLogParse`
-
-#### Parse Event Logs
-
-- All events
-- Account management (Security.evtx)
-- Account Logon and Logon Events (Security.evtx)
-- Network Share Objects (Security.evtx)
-- Scheduled task activity Events
-    - Task Scheduler (Microsoft-Windows-TaskScheduler%%4Operational.evtx)
-    - Object Access (Security.evtx)
-- Object Handle Auditing (Security.evtx)
-- Policy Changes Auditing
-    - Audit Policy Change (Security.evtx)
-    - Audit Policy Change System (System.evtx)
-- Windows Services Auditing (Security.evtx)
-- WiFi Connection (Security.evtx)
-- Process Tracking (Security.evtx) ***EID: 4688 Default disabled***
-- Program Execution (Microsoft-Windows-AppLocker%%4EXE.evtx)
-- Sysmon Events (Microsoft-Windows-Sysmon%%4Operational.evtx) ***Default No Such File***
-- PowerShell Events
-    - PowerShell (Microsoft-Windows-PowerShell%%4Operational.evtx)
-    - (Windows PowerShell.evtx)
-- Windows Defender
-    - Windows Defender (Microsoft-Windows-Windows Defender%%4Operational.evtx)
-    - WHC (Microsoft-Windows-Windows Defender%%4WHC.evtx)
-- Remote Desktop Protocol
-    - RDP_LocalSessionManager (Microsoft-Windows-TerminalServices-LocalSessionManager%%4Operational.evtx)
-    - RDP_RemoteConnectionManager (Microsoft-Windows-TerminalServices-RemoteConnectionManager%%4Operational.evtx)
-    - RDP_Security (Security.evtx)
-    - RDP_System (System.evtx)
-
-### RegRipper Script
-
-#### Setting Script Variables
-
-- %1 - Case Name
-- Script Drive: `SCRIPT_DRIVE=%~d0`
-- rip.exe Path: `%SCRIPT_PATH%\Windows\Tools\EvidenceAnalysis\RegRipper3.0-master`
-- registry folder Path: `%SCRIPT_PATH%\Collection_%CASE_NAME%\Registry`
-- Parse Result Path: `%SCRIPT_PATH%\Collection_%CASE_NAME%\RegParse`
-
-#### Parses Registry Hive
-
-- At
-- SAM
-- SRUM
-- UserActivity
-- AppCompatCache
-    - appcompatcache (SYSTEM)
-    - shimcache (SYSTEM)
--  WindowsPrefetch
-    - Prefetch (SYSTEM)
-- SystemConfiguration
-- SoftwareExecutedHistory
 
 ## Linux
 ### IR Script
-
-![IR_Scritp_linux](https://user-images.githubusercontent.com/16744374/211159961-97c84fe5-4c97-408b-9f2c-0dccd63f9a45.png)
 
 **Make sure executed script as root or with sudo command.**
 
@@ -273,23 +222,17 @@
     cp -r /etc/cron*
     ```
     
-- utmp/wtmp/btmp
+- utmp / wtmp / btmp
+    - utmp: current login user (in memory)
+    - wtmp: all valid past logins
+    - btmp: bad logins
     
     ```bash
     utmpdump /var/run/utmp
     utmpdump /var/log/wtmp
     utmpdump /var/log/btmp
     ```
-    
-    > Note: `/var/log/wtmp` - all valid past logins
-    > 
-    > 
-    >           `/var/log/btmp` - bad logins
-    > 
-    >           `/var/log/lastlog` - recently login user
-    > 
-    >           `/var/run/utmp` - current login user → in memory
-    > 
+
 - disk image file **(default disabled)**
     
     ```bash
@@ -309,8 +252,6 @@ Get File Creation Date/Time
 ## OS X
 ### IR Script
 
-<img width="1057" alt="IR_Scritp_osx" src="https://user-images.githubusercontent.com/16744374/211160275-d7d0dcb7-3ca6-43c5-b556-95f6ee77b21d.png">
-
 **Make sure executed script as root or with sudo command.**
 
 ```bash
@@ -318,7 +259,6 @@ Get File Creation Date/Time
 ```
 
 > Note: Conver file from DOS to UNIX via VIM: `:set fileformat=unix`
-> 
 
 ## OS X File System
 
@@ -364,3 +304,14 @@ Get File Creation Date/Time
     - Safari
     - Chrome
     - Firefox
+    
+# Credit
+- [Eric Zimmerman's tools](https://ericzimmerman.github.io/#!index.md)
+- [RegRipper3.0 ](https://github.com/keydet89/RegRipper3.0)
+- [Linux Forensics: With Python and Shell Scripting / Philip Polstra](https://github.com/ppolstra)
+- [OS X Incident Response: Scripting and Analysis / Jaron Bradley](https://github.com/jbradley89/osx_incident_response_scripting_and_analysis)
+- [Tsurugi Bento toolkit](https://tsurugi-linux.org/index.php)
+- **Every awesome free / open source forensic analysis tools**
+
+## TODO
+- determine legacy system in forensics mode
