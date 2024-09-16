@@ -15,8 +15,7 @@
 │  
 └───📁 Windows
     └───📁 Scripts
-    │   │   🗎 DFIR.cmd
-    │   └── 🗎 dumpcap.bat
+    │   └── 🗎 DFIR.cmd
     └───📁 Tools
     　   │　 📁 EvidenceAnalysis
     　   │　 📁 EvidenceCollection
