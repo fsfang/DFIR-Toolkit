@@ -85,8 +85,8 @@ if "%PROCESSOR_ARCHITECTURE%" == "AMD64" set ARCH=64
 set SCRIPT_DRIVE=%~d0
 set SCRIPT_NAME=%~nx0
 
-set COLLECTION_TOOLS=SCRIPT_DRIVE\Windows\Tools\EvidenceCollection
-set ANALYSIS_TOOLS=SCRIPT_DRIVE\Windows\Tools\EvidenceAnalysis
+set COLLECTION_TOOLS=%SCRIPT_DRIVE%\Windows\Tools\EvidenceCollection
+set ANALYSIS_TOOLS=%SCRIPT_DRIVE%\Windows\Tools\EvidenceAnalysis
 
 call :header
 
