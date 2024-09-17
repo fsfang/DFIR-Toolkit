@@ -26,7 +26,7 @@
 
 ### DFIR.cmd
 
-![2024-09-16 23_13_58](https://github.com/user-attachments/assets/867af057-21a3-49b9-8a6d-cc578313cb65)
+![2024-09-17 11_29_05-Windows 10 - VMware Workstation](https://github.com/user-attachments/assets/05191d5f-1a92-4c2b-a00a-f5f820e7b330)
 
 ```
 Usage:
