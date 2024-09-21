@@ -14,12 +14,12 @@
 │   └───🗎 IR_Script.sh
 │  
 └───📁 Windows
-    └───📁 Scripts
-    │   └── 🗎 DFIR.cmd
-    └───📁 Tools
-    　   │　 📁 EvidenceAnalysis
-    　   │　 📁 EvidenceCollection
-    　   └── 📁 Miscellaneous
+│    └───📁 Scripts
+│    │   └── 🗎 DFIR.cmd
+│    └───📁 Tools
+│       │   📁 EvidenceAnalysis
+│       │   📁 EvidenceCollection
+└───────└── 📁 Miscellaneous
 ```
 
 ## Windows
