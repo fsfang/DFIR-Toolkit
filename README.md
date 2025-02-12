@@ -7,26 +7,27 @@
 │   └───📁 LiME
 │   │
 │   └───📁 Scripts
-│       │   🗎 IR_Script.sh
+│       │　 🗎 IR_Script.sh
 │       └── 🗎 crtime.sh
 │   
 └───📁 OS X
 │   └───🗎 IR_Script.sh
 │  
 └───📁 Windows
-     └───📁 Scripts
-     │   └── 🗎 DFIR.cmd
-     └───📁 Tools
-          │   📁 EvidenceAnalysis
-          │   📁 EvidenceCollection
-          └── 📁 Miscellaneous
+    └───📁 Scripts
+    │   │　 🗎 DFIR.cmd
+    │   └── 🗎 dumpcap.bat
+    └───📁 Tools
+    　   │　 📁 EvidenceAnalysis
+    　   │　 📁 EvidenceCollection
+    　   └── 📁 Miscellaneous
 ```
 
 ## Windows
 
 ### DFIR.cmd
 
-![2024-09-17 11_29_05-Windows 10 - VMware Workstation](https://github.com/user-attachments/assets/05191d5f-1a92-4c2b-a00a-f5f820e7b330)
+![2024-09-16 23_13_58](https://github.com/user-attachments/assets/867af057-21a3-49b9-8a6d-cc578313cb65)
 
 ```
 Usage:
@@ -166,28 +167,7 @@ DFIR.cmd /p {CaseName}
 - Prefetch
 - SRUM
 
-### Chaining
-
-#### Dump memory mode + Live response mode
-Dump physical memory and collect artifacts on local machine.
-```shell
-DFIR.cmd /m /l
-```
-
-#### Dump memory mode + Live response mode + Parser mode
-Dump physical memory and collect artifacts with parsing on local machine (.net 6 software requires)
-```shell
-DFIR.cmd /m /l /p ComputerName
-```
-
-#### Forensics mode + Parser mode
-Collecting and parsing artifacts from image mounting drive.
-```shell
-DFIR.cmd /f {Mount Point} {CaseName} /p {CaseName}
-```
-
 ## Linux
-
 ### IR Script
 
 **Make sure executed script as root or with sudo command.**
@@ -196,7 +176,7 @@ DFIR.cmd /f {Mount Point} {CaseName} /p {CaseName}
 ./IR_Script.sh
 ```
 
-#### Collecting artifacts
+## Collecting artifacts
 
 - System state and Configuration
     - `uptime`
@@ -263,14 +243,13 @@ DFIR.cmd /f {Mount Point} {CaseName} /p {CaseName}
     dd if=/dev/INPUT/DEVICE-NAME-HERE conv=sync,noerror bs=64K | gzip -c > /path/to/my-disk.image.gz
     ```
 
-### crtime.sh
+# crtime.sh
 Get File Creation Date/Time
 ```bash
 ./crtime.sh file
 ```
 
 ## OS X
-
 ### IR Script
 
 **Make sure executed script as root or with sudo command.**
@@ -281,14 +260,14 @@ Get File Creation Date/Time
 
 > Note: Conver file from DOS to UNIX via VIM: `:set fileformat=unix`
 
-### OS X File System
+## OS X File System
 
 - User: User specific files
 - Local: Apps/Resources
 - System
 - Network
 
-### Collecting artifacts
+## Collecting artifacts
 
 - System Information
     - uptime
@@ -334,5 +313,5 @@ Get File Creation Date/Time
 - [Tsurugi Bento toolkit](https://tsurugi-linux.org/index.php)
 - **Every awesome free / open source forensic analysis tools**
 
-# TODO
-- Windows: Determine legacy system in forensics mode.
+## TODO
+- determine legacy system in forensics mode

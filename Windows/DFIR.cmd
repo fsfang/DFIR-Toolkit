@@ -2,7 +2,7 @@
 :: Name:     DFIR.cmd                                                                           ::
 :: Purpose:  An artifacts collection and analysis script based on Windows operating system.     ::
 :: Author:   FS FANG                                                                            ::
-:: Version:  2.0.0                                                                              ::
+:: Version:  2.0.1                                                                              ::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 @echo off
 goto :init
@@ -14,7 +14,7 @@ echo.
 echo %ESC%%G%  ____  _____ _____ _____ _____ _____ ____  %ESC%%END% 
 echo %ESC%%G% ^|    \^|   __^|     ^| __  ^|     ^|     ^|    \ %ESC%%END%
 echo %ESC%%G% ^|  ^|  ^|   __^|-   -^|    -^|   --^| ^| ^| ^|  ^|  ^| Windows Ver. %ESC%%END%
-echo %ESC%%G% ^|____/^|__^|  ^|_____^|__^|__^|_____^|_^|_^|_^|____/  v2.0.0  @FFS %ESC%%END%       
+echo %ESC%%G% ^|____/^|__^|  ^|_____^|__^|__^|_____^|_^|_^|_^|____/  v2.0.1  @FFS %ESC%%END%       
 
 echo.
 echo %ESC%%C% Developed by: FS FANG %ESC%%END%
@@ -75,7 +75,7 @@ goto :eof
 
 :init
 REM Setting Environment 
-set VERSION=2.0.0
+set VERSION=2.0.1
 set SYSTEM_DRIVE=
 set CASE_NAME=
 
@@ -306,6 +306,7 @@ if %ARCH% == 64 (
 at > %COLLECTION_FOLDER%\TaskInfo\%CASE_NAME%_At.txt 2>&1
 schtasks /query > %COLLECTION_FOLDER%\TaskInfo\%CASE_NAME%_Schtask.txt 2>&1
 xcopy %SYSTEM_DRIVE%\Windows\Tasks\* %COLLECTION_FOLDER%\TaskInfo\Tasks\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+xcopy %SYSTEM_DRIVE%\Windows\System32\Tasks\* %COLLECTION_FOLDER%\TaskInfo\Tasks\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
 goto :eof
 
 :collect_registry
@@ -581,7 +582,7 @@ if %ARCH% == 64 (
 )
 
 REM sigcheck iis installed modules
-for /f "tokens=2 delims=:" %%i in ('%SYSTEM_DRIVE%\Windows\system32\inetsrv\appcmd.exe list config -section:system.webServer/globalModules /text:* ^ ^| findstr "image"') do call :sigcheck %%i
+for /f "tokens=1" %%i in ('%SYSTEM_DRIVE%\Windows\system32\inetsrv\appcmd.exe list config -section:system.webServer/globalModules /text:* ^ ^| findstr "image"') do call :sigcheck %%i
 
 REM copy iis logs
 for /f %%i in ('%SYSTEM_DRIVE%\Windows\system32\inetsrv\appcmd.exe list sites /text:logFile.directory') do (
@@ -591,6 +592,8 @@ for /f %%i in ('%SYSTEM_DRIVE%\Windows\system32\inetsrv\appcmd.exe list sites /t
 :sigcheck
 REM For Processing sigcheck iis installed modules
 if not [%1] == [] set module=%1
+set module="%image:~6%"
+
 if %ARCH% == 32 (
     %COLLECTION_TOOLS%\sigcheck\sigcheck.exe /accepteula /nobanner -h %module% >> %COLLECTION_FOLDER%\IISInfo\%CASE_NAME%_modulesign.txt 2>&1
 )
