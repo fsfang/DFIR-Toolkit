@@ -305,8 +305,8 @@ if %ARCH% == 64 (
 )
 at > %COLLECTION_FOLDER%\TaskInfo\%CASE_NAME%_At.txt 2>&1
 schtasks /query > %COLLECTION_FOLDER%\TaskInfo\%CASE_NAME%_Schtask.txt 2>&1
-xcopy %SYSTEM_DRIVE%\Windows\Tasks\* %COLLECTION_FOLDER%\TaskInfo\Tasks\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-xcopy %SYSTEM_DRIVE%\Windows\System32\Tasks\* %COLLECTION_FOLDER%\TaskInfo\Tasks\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+%SYSTEM_DRIVE%\Windows\system32\xcopy %SYSTEM_DRIVE%\Windows\Tasks\* %COLLECTION_FOLDER%\TaskInfo\Tasks\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+%SYSTEM_DRIVE%\Windows\system32\xcopy %SYSTEM_DRIVE%\Windows\System32\Tasks\* %COLLECTION_FOLDER%\TaskInfo\Tasks\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
 goto :eof
 
 :collect_registry
@@ -392,7 +392,7 @@ cd %USERPATH%
 for /f "tokens=*" %%i in ('dir /ah /b /s Recent') do @for /f "tokens=3 delims=\" %%j in ("%%i") do (
     if not exist %COLLECTION_FOLDER%\Recent\%%j (
         mkdir %COLLECTION_FOLDER%\Recent\%%j 2>>%COLLECTION_FOLDER%\Collection.log
-        REM xcopy "%%i" %COLLECTION_FOLDER%\Recent\%%j /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+        REM %SYSTEM_DRIVE%\Windows\system32\xcopy "%%i" %COLLECTION_FOLDER%\Recent\%%j /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
         %COLLECTION_TOOLS%\Robocopy\Robocopy.exe "%%i" %COLLECTION_FOLDER%\Recent\%%j /ZB /copy:DAT /r:0 /ts /FP /np /E /A-:SH >> %COLLECTION_FOLDER%\Collection.log 2>&1
     )
 )
@@ -417,7 +417,7 @@ cd %USERPATH%
 for /f "tokens=*" %%i in ('dir /ad /b /s "Terminal Server Client" 2^>^> %COLLECTION_FOLDER%\Collection.log') do @for /f "tokens=3 delims=\" %%j in ("%%i") do (
     if not exist %COLLECTION_FOLDER%\BMC\%%j (
         mkdir %COLLECTION_FOLDER%\BMC\%%j 2>>%COLLECTION_FOLDER%\Collection.log
-        xcopy "%%i\Cache" %COLLECTION_FOLDER%\BMC\%%j /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1            
+        %SYSTEM_DRIVE%\Windows\system32\xcopy "%%i\Cache" %COLLECTION_FOLDER%\BMC\%%j /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1            
     )
 )
 
@@ -438,7 +438,7 @@ cd %USERPATH%
 for /f "tokens=*" %%i in ('dir /ad /b /s PSReadLine 2^>^> %COLLECTION_FOLDER%\Collection.log') do @for /f "tokens=3 delims=\" %%j in ("%%i") do (
     if not exist %COLLECTION_FOLDER%\PowerShell\%%j (
         mkdir %COLLECTION_FOLDER%\PowerShell\%%j 2>>%COLLECTION_FOLDER%\Collection.log
-        xcopy %%i\ConsoleHost_history.txt %COLLECTION_FOLDER%\PowerShell\%%j /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+        %SYSTEM_DRIVE%\Windows\system32\xcopy %%i\ConsoleHost_history.txt %COLLECTION_FOLDER%\PowerShell\%%j /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
     )
 )
 
@@ -459,7 +459,7 @@ cd %USERPATH%
 for /f "tokens=*" %%i in ('dir /ad /b /s ConnectedDevicesPlatform 2^>^> %COLLECTION_FOLDER%\Collection.log') do @for /f "tokens=3 delims=\" %%j in ("%%i") do (
     if not exist %COLLECTION_FOLDER%\ActivitiesCache\%%j (
         mkdir %COLLECTION_FOLDER%\ActivitiesCache\%%j 2>>%COLLECTION_FOLDER%\Collection.log
-        xcopy %%i\L.%%j\* %COLLECTION_FOLDER%\ActivitiesCache\%%j /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+        %SYSTEM_DRIVE%\Windows\system32\xcopy %%i\L.%%j\* %COLLECTION_FOLDER%\ActivitiesCache\%%j /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
     )
 )
 
@@ -477,15 +477,15 @@ REM FileZilla Client
 for /f "tokens=*" %%i in ('dir /ad /b /s FileZilla* 2^>^> %COLLECTION_FOLDER%\Collection.log') do @for /f "tokens=3 delims=\" %%j in ("%%i") do (
     if not exist %COLLECTION_FOLDER%\FTP\%%j (
         mkdir %COLLECTION_FOLDER%\FTP\%%j 2>>%COLLECTION_FOLDER%\Collection.log
-        xcopy %%i\*.xml %COLLECTION_FOLDER%\FTP\%%j /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+        %SYSTEM_DRIVE%\Windows\system32\xcopy %%i\*.xml %COLLECTION_FOLDER%\FTP\%%j /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
     )
 )
 
 REM FileZilla Server logs
-xcopy "%SYSTEM_DRIVE%\Windows\Program Files (x86)\FileZilla Server\Logs\*.log" %COLLECTION_FOLDER%\FTP /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+%SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\Windows\Program Files (x86)\FileZilla Server\Logs\*.log" %COLLECTION_FOLDER%\FTP /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
 
 REM WinSCP ini file
-xcopy %SYSTEM_DRIVE%\Windows\WinSCP.ini %COLLECTION_FOLDER%\FTP /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+%SYSTEM_DRIVE%\Windows\system32\xcopy %SYSTEM_DRIVE%\Windows\WinSCP.ini %COLLECTION_FOLDER%\FTP /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
 goto :eof
 
 :collect_eventlogs
@@ -497,7 +497,7 @@ echo %ESC%%Y%[+] Collecting Windows Event Logs on %DATE% %TIME% %ESC%%END%
 %COLLECTION_TOOLS%\RawCopy\RawCopy.exe /FileNamePath:%SYSTEM_DRIVE%\Windows\System32\config\SecEvent.Evt /OutputPath:%COLLECTION_FOLDER%\EventLog >> %COLLECTION_FOLDER%\Collection.log 2>&1
 %COLLECTION_TOOLS%\RawCopy\RawCopy.exe /FileNamePath:%SYSTEM_DRIVE%\Windows\System32\config\SysEvent.Evt /OutputPath:%COLLECTION_FOLDER%\EventLog >> %COLLECTION_FOLDER%\Collection.log 2>&1
 REM %COLLECTION_TOOLS%\Robocopy\Robocopy.exe "%SYSTEM_DRIVE%\Windows\System32\winevt\Logs" "%COLLECTION_FOLDER%\EventLog" /ZB /copy:DAT /r:0 /ts /FP /np /E >> %COLLECTION_FOLDER%\Collection.log 2>&1
-xcopy %SYSTEM_DRIVE%\Windows\System32\winevt\Logs %COLLECTION_FOLDER%\EventLog /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+%SYSTEM_DRIVE%\Windows\system32\xcopy %SYSTEM_DRIVE%\Windows\System32\winevt\Logs %COLLECTION_FOLDER%\EventLog /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
 goto :eof
 
 :collect_mbr
@@ -539,7 +539,7 @@ REM Collecting Prefetch File
 echo [+] Collecting Prefetch File on %DATE% %TIME% >> %COLLECTION_FOLDER%\Collection.log
 echo %ESC%%Y%[+] Collecting Prefetch File on %DATE% %TIME% %ESC%%END%
 
-REM xcopy %SYSTEM_DRIVE%\Windows\Prefetch\*.pf %COLLECTION_FOLDER%\Prefetch\ /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+REM %SYSTEM_DRIVE%\Windows\system32\xcopy %SYSTEM_DRIVE%\Windows\Prefetch\*.pf %COLLECTION_FOLDER%\Prefetch\ /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
 %COLLECTION_TOOLS%\Robocopy\Robocopy.exe %SYSTEM_DRIVE%\Windows\Prefetch %COLLECTION_FOLDER%\Prefetch\ *.pf /ZB /copy:DAT /r:0 /ts /FP /np >> %COLLECTION_FOLDER%\Collection.log 2>&1
 
 goto :eof
@@ -582,17 +582,17 @@ if %ARCH% == 64 (
 )
 
 REM sigcheck iis installed modules
-for /f "tokens=1" %%i in ('%SYSTEM_DRIVE%\Windows\system32\inetsrv\appcmd.exe list config -section:system.webServer/globalModules /text:* ^ ^| findstr "image"') do call :sigcheck %%i
+for /f "tokens=*" %%i in ('%SYSTEM_DRIVE%\Windows\system32\inetsrv\appcmd.exe list config -section:system.webServer/globalModules /text:* ^ ^| findstr "image"') do call :sigcheck %%i
 
 REM copy iis logs
 for /f %%i in ('%SYSTEM_DRIVE%\Windows\system32\inetsrv\appcmd.exe list sites /text:logFile.directory') do (
-    xcopy %%i %COLLECTION_FOLDER%\IISInfo\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy %%i %COLLECTION_FOLDER%\IISInfo\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
 )
 
 :sigcheck
 REM For Processing sigcheck iis installed modules
-if not [%1] == [] set module=%1
-set module="%image:~6%"
+if not [%1] == [] set path=%1
+set module="%path:~6%"
 
 if %ARCH% == 32 (
     %COLLECTION_TOOLS%\sigcheck\sigcheck.exe /accepteula /nobanner -h %module% >> %COLLECTION_FOLDER%\IISInfo\%CASE_NAME%_modulesign.txt 2>&1
@@ -668,9 +668,9 @@ REM Collecting WMI repository
 echo [+] Collecting WMI repository on %DATE% %TIME% >> %COLLECTION_FOLDER%\Collection.log
 echo %ESC%%Y%[+] Collecting WMI repository on %DATE% %TIME% %ESC%%END%
 
-xcopy %SYSTEM_DRIVE%\Windows\System32\wbem\Repository %COLLECTION_FOLDER%\WMI /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-xcopy %SYSTEM_DRIVE%\Windows\System32\wbem\AutoRecover %COLLECTION_FOLDER%\WMI /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-xcopy %SYSTEM_DRIVE%\Windows\System32\wbem\*mof %COLLECTION_FOLDER%\WMI /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+%SYSTEM_DRIVE%\Windows\system32\xcopy %SYSTEM_DRIVE%\Windows\System32\wbem\Repository %COLLECTION_FOLDER%\WMI /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+%SYSTEM_DRIVE%\Windows\system32\xcopy %SYSTEM_DRIVE%\Windows\System32\wbem\AutoRecover %COLLECTION_FOLDER%\WMI /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+%SYSTEM_DRIVE%\Windows\system32\xcopy %SYSTEM_DRIVE%\Windows\System32\wbem\*mof %COLLECTION_FOLDER%\WMI /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
 
 goto :eof
 
@@ -679,7 +679,7 @@ REM Collecting setupapi.log
 echo [+] Collecting setupapi.log on %DATE% %TIME% >> %COLLECTION_FOLDER%\Collection.log
 echo %ESC%%Y%[+] Collecting setupapi.log on %DATE% %TIME% %ESC%%END%
 
-xcopy %SYSTEM_DRIVE%\Windows\inf\setupapi.dev.*.log %COLLECTION_FOLDER%\USBInfo /C /F /H /Y >> %COLLECTION_FOLDER%\Collection.log 2>&1
+%SYSTEM_DRIVE%\Windows\system32\xcopy %SYSTEM_DRIVE%\Windows\inf\setupapi.dev.*.log %COLLECTION_FOLDER%\USBInfo /C /F /H /Y >> %COLLECTION_FOLDER%\Collection.log 2>&1
 goto :eof
 
 :collect_cryptneturlcache
@@ -694,7 +694,7 @@ cd %USERPATH%
 for /f "tokens=*" %%i in ('dir /ad /b /s CryptnetUrlCache 2^>^> %COLLECTION_FOLDER%\Collection.log') do @for /f "tokens=3 delims=\" %%j in ("%%i") do (
     if not exist %COLLECTION_FOLDER%\CryptnetUrlCache\%%j (
         mkdir %COLLECTION_FOLDER%\CryptnetUrlCache\%%j 2>>%COLLECTION_FOLDER%\Collection.log
-        xcopy %%i %COLLECTION_FOLDER%\CryptnetUrlCache\%%j /C /F /H /Y /I /R /S >> %COLLECTION_FOLDER%\Collection.log
+        %SYSTEM_DRIVE%\Windows\system32\xcopy %%i %COLLECTION_FOLDER%\CryptnetUrlCache\%%j /C /F /H /Y /I /R /S >> %COLLECTION_FOLDER%\Collection.log
     )
 )
 
@@ -711,32 +711,32 @@ echo [+] Collecting AntiVirus logs on %DATE% %TIME% >> %COLLECTION_FOLDER%\Colle
 echo %ESC%%Y%[+] Collecting AntiVirus logs on %DATE% %TIME% %ESC%%END%
 
 if %OS% == legacy (
-    xcopy "%SYSTEM_DRIVE%\Documents And Settings\All Users\Application Data\Avast Software\Avast\Log\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\Documents and Settings\All Users\Application Data\AVG\Antivirus\log\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\Documents and Settings\All Users\Application Data\AVG\Antivirus\report\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\Documents and Settings\All Users\Application Data\ESET\ESET NOD32 Antivirus\Logs\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\Documents and Settings\All Users\Application Data\McAfee\DesktopProtection\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\Documents and Settings\All Users\Application Data\Sophos\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\Documents and Settings\All Users\Application Data\Symantec\Symantec Endpoint Protection\Logs\AV\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\Documents and Settings\All Users\Application Data\Symantec\Symantec Endpoint Protection\Quarantine\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\Documents And Settings\All Users\Application Data\Avast Software\Avast\Log\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\Documents and Settings\All Users\Application Data\AVG\Antivirus\log\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\Documents and Settings\All Users\Application Data\AVG\Antivirus\report\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\Documents and Settings\All Users\Application Data\ESET\ESET NOD32 Antivirus\Logs\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\Documents and Settings\All Users\Application Data\McAfee\DesktopProtection\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\Documents and Settings\All Users\Application Data\Sophos\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\Documents and Settings\All Users\Application Data\Symantec\Symantec Endpoint Protection\Logs\AV\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\Documents and Settings\All Users\Application Data\Symantec\Symantec Endpoint Protection\Quarantine\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
 ) else (   
-    xcopy "%SYSTEM_DRIVE%\ProgramData\Avast Software\Avast\Log\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\Avast Software\Avast\Chest\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\AVG\Antivirus\log\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\AVG\Antivirus\report\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\Avira\Antivirus\LOGFILES\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\ESET\ESET NOD32 Antivirus\Logs\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\F-Secure\Log\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\F-Secure\Antivirus\ScheduledScanReports\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\McAfee\DesktopProtection\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\McAfee\Endpoint Security\Logs\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\McAfee\Endpoint Security\Logs_Old\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\Mcafee\VirusScan\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\Sophos\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\Symantec\Symantec Endpoint Protection\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\Trend Micro\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\Microsoft\Microsoft AntiMalware\Support\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
-    xcopy "%SYSTEM_DRIVE%\ProgramData\Microsoft\Windows Defender\Support\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\Avast Software\Avast\Log\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\Avast Software\Avast\Chest\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\AVG\Antivirus\log\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\AVG\Antivirus\report\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\Avira\Antivirus\LOGFILES\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\ESET\ESET NOD32 Antivirus\Logs\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\F-Secure\Log\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\F-Secure\Antivirus\ScheduledScanReports\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\McAfee\DesktopProtection\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\McAfee\Endpoint Security\Logs\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\McAfee\Endpoint Security\Logs_Old\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\Mcafee\VirusScan\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\Sophos\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\Symantec\Symantec Endpoint Protection\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\Trend Micro\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\Microsoft\Microsoft AntiMalware\Support\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
+    %SYSTEM_DRIVE%\Windows\system32\xcopy "%SYSTEM_DRIVE%\ProgramData\Microsoft\Windows Defender\Support\\" %COLLECTION_FOLDER%\Antivirus\ /E /C /F /H /Y /I /R >> %COLLECTION_FOLDER%\Collection.log 2>&1
 )
 goto :eof
 
